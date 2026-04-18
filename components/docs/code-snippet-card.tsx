@@ -56,7 +56,7 @@ export function CodeSnippetCard({
               size="sm"
               onClick={handleCopy}
               className="h-8 shrink-0 rounded-full border-slate-700 bg-slate-900 px-2.5 text-[11px] tracking-normal text-slate-200 hover:bg-slate-800 hover:text-white sm:px-3"
-              aria-label={copied ? "Codigo copiado" : "Copiar codigo"}
+              aria-label={copied ? "Código copiado" : "Copiar código"}
             >
               {copied ? (
                 <Check className="size-4" />
@@ -64,7 +64,7 @@ export function CodeSnippetCard({
                 <Copy className="size-4" />
               )}
               <span className="hidden sm:inline">
-                {copied ? "Copiado" : "Copiar codigo"}
+                {copied ? "Copiado" : "Copiar código"}
               </span>
             </Button>
           </div>

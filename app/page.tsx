@@ -41,11 +41,11 @@ export default function HomePage() {
         <section className="md:hidden">
           <div className="px-1 pb-4">
             <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">
-              Componentes disponiveis
+              Componentes disponíveis
             </h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Cada item abre uma area dedicada com preview isolado e
-              especificacoes tecnicas relevantes.
+              Cada item abre uma área dedicada com preview isolado e
+              especificações técnicas relevantes.
             </p>
           </div>
           <ComponentCarousel components={componentCatalog} />
@@ -58,11 +58,11 @@ export default function HomePage() {
           <section className="hidden space-y-4 md:block">
             <div className="space-y-2 px-1 sm:px-0">
               <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground sm:text-2xl">
-                Componentes disponiveis
+                Componentes disponíveis
               </h2>
               <p className="max-w-xl text-sm leading-6 text-muted-foreground">
-                Cada item abre uma area dedicada com preview isolado e
-                especificacoes tecnicas relevantes.
+                Cada item abre uma área dedicada com preview isolado e
+                especificações técnicas relevantes.
               </p>
             </div>
             <div className="hidden gap-4 md:grid md:grid-cols-2">
@@ -89,7 +89,7 @@ export default function HomePage() {
                     {component.summary}
                   </p>
                   <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground">
-                    Abrir documentacao
+                    Abrir documentação
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                   </div>
                 </Link>
@@ -100,10 +100,10 @@ export default function HomePage() {
           <Card className="min-w-0 overflow-hidden border-white/60 bg-white/80 shadow-soft">
             <CardHeader className="p-5 pb-0 sm:p-6 sm:pb-0">
               <CardTitle className="text-xl sm:text-2xl">
-                Base tecnica da biblioteca
+                Base técnica da biblioteca
               </CardTitle>
               <CardDescription>
-                Visao resumida da fundacao instalada e dos tokens globais
+                Visão resumida da fundação instalada e dos tokens globais
                 compartilhados.
               </CardDescription>
             </CardHeader>

@@ -40,7 +40,7 @@ const defaultItems: SidebarItem[] = [
     icon: MessageSquare,
   },
   {
-    label: "Configuracoes",
+    label: "Configurações",
     href: "configuracoes",
     icon: Settings,
   },
@@ -89,7 +89,7 @@ export function Sidebar({
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
-              Navegacao
+              Navegação
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-card-foreground">
               {title}

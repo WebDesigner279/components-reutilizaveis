@@ -22,6 +22,7 @@ Este projeto organiza uma biblioteca de componentes com foco em uso prático e d
 - shadcn/ui
 - Radix UI
 - lucide-react
+- Service Worker nativo para suporte a PWA
 
 ## Componentes documentados
 
@@ -34,10 +35,15 @@ Este projeto organiza uma biblioteca de componentes com foco em uso prático e d
 
 ```text
 app/
+  apple-icon.tsx                # ícone Apple gerado via Next
+  icon.tsx                      # ícone principal gerado via Next
+  offline/page.tsx              # fallback offline
   page.tsx                       # home da biblioteca
   componentes/[slug]/page.tsx   # página técnica por componente
   sidebar/page.tsx              # página de demonstração adicional
 components/
+  pwa/
+    service-worker-registration.tsx
   sidebar.tsx
   docs/
     code-snippet-card.tsx
@@ -49,6 +55,12 @@ components/
 lib/
   component-catalog.ts          # catálogo, props, snippets e helpers
   utils.ts
+public/
+  manifest.json                 # manifesto instalável da PWA
+  sw.js                         # service worker para cache e offline
+  icon-192.svg
+  icon-512.svg
+  maskable-icon.svg
 ```
 
 ## Rotas
@@ -93,6 +105,20 @@ http://localhost:3000
 npm run build
 npm run start
 ```
+
+## PWA
+
+O projeto agora expõe um manifesto instalável em /manifest.json, registra um service worker próprio em /sw.js e inclui uma rota offline em /offline.
+
+Recursos configurados:
+
+- instalação como aplicativo em navegadores modernos
+- cache offline para navegação e assets já visitados
+- atualização automática do service worker com recarga controlada
+- ícones dedicados para instalação, atalho e modo maskable
+- rota offline para páginas ainda não armazenadas em cache
+
+Para testar a experiência offline, acesse a aplicação pelo menos uma vez com conexão ativa e depois recarregue a home ou navegue para uma rota não visitada sem rede. A home deve ser carregada do cache e as rotas inéditas devem cair no fallback de /offline.
 
 ### Lint
 

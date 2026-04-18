@@ -56,7 +56,7 @@ function renderPreview(slug: string) {
             <Button size="sm">Small</Button>
             <Button size="default">Default</Button>
             <Button size="lg">Large</Button>
-            <Button size="icon" aria-label="Avancar">
+            <Button size="icon" aria-label="Avançar">
               <ArrowRight className="size-4" />
             </Button>
           </div>
@@ -69,7 +69,7 @@ function renderPreview(slug: string) {
             <CardHeader>
               <CardTitle>Receita mensal</CardTitle>
               <CardDescription>
-                Atualizado com dados do periodo atual.
+                Atualizado com dados do período atual.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -82,7 +82,7 @@ function renderPreview(slug: string) {
             <CardHeader>
               <CardTitle>Pipeline</CardTitle>
               <CardDescription>
-                Resumo operacional em bloco reutilizavel.
+                Resumo operacional em bloco reutilizável.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -164,7 +164,7 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
               <div className="hidden md:flex flex-wrap gap-2">
                 <Button asChild variant="outline" className="rounded-full px-4">
                   <Link href={nextComponent.href}>
-                    Visualizar proximo componente
+                    Visualizar próximo componente
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
@@ -202,9 +202,9 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
 
           <Card className="border-white/60 bg-white/80 shadow-soft">
             <CardHeader>
-              <CardTitle>Informacoes basicas</CardTitle>
+              <CardTitle>Informações básicas</CardTitle>
               <CardDescription>
-                Resumo tecnico direto para adocao e manutencao.
+                Resumo técnico direto para adoção e manutenção.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -237,7 +237,7 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
             <CardHeader>
               <CardTitle>Props relevantes</CardTitle>
               <CardDescription>
-                Referencia rapida da API atual do componente.
+                Referência rápida da API atual do componente.
               </CardDescription>
             </CardHeader>
             <CardContent className="min-w-0 space-y-3">
@@ -266,8 +266,8 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
           </Card>
 
           <CodeSnippetCard
-            title="Codigo reutilizavel"
-            description="Snippet minimo para uso imediato no projeto."
+            title="Código reutilizável"
+            description="Snippet mínimo para uso imediato no projeto."
             code={component.snippet}
           />
         </section>
@@ -275,7 +275,7 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
         <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
           <Card className="border-white/60 bg-white/80 shadow-soft">
             <CardHeader>
-              <CardTitle>Stack tecnica utilizada</CardTitle>
+              <CardTitle>Stack técnica utilizada</CardTitle>
               <CardDescription>
                 Camadas diretamente envolvidas no componente e na biblioteca.
               </CardDescription>
@@ -309,7 +309,7 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
             <CardHeader>
               <CardTitle>CSS e tokens envolvidos</CardTitle>
               <CardDescription>
-                Informacoes basicas para manter consistencia visual na expansao
+                Informações básicas para manter consistência visual na expansão
                 da biblioteca.
               </CardDescription>
             </CardHeader>
