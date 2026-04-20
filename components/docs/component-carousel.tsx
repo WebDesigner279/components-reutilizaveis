@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { cva } from "class-variance-authority";
 import { ArrowRight } from "lucide-react";
 
@@ -49,8 +52,38 @@ export function ComponentCarousel({
   className,
   currentSlug,
 }: ComponentCarouselProps) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const currentItemRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (!currentSlug || !viewportRef.current || !currentItemRef.current) {
+      return;
+    }
+
+    const mobileMediaQuery = window.matchMedia("(max-width: 767px)");
+
+    if (!mobileMediaQuery.matches) {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      currentItemRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [currentSlug]);
+
   return (
-    <div className={cn(carouselViewportVariants(), className)}>
+    <div
+      ref={viewportRef}
+      className={cn(carouselViewportVariants(), className)}
+    >
       <div className={carouselTrackVariants()}>
         {components.map((component) =>
           (() => {
@@ -59,6 +92,7 @@ export function ComponentCarousel({
             return (
               <Link
                 key={component.slug}
+                ref={isCurrent ? currentItemRef : null}
                 href={component.href}
                 aria-current={isCurrent ? "page" : undefined}
                 className={carouselItemVariants({ current: isCurrent })}

@@ -62,11 +62,10 @@
   }
 
   .code-scroll-area {
-    --code-scrollbar-size: 14px;
+    --code-scrollbar-size: 0px;
     --code-scroll-padding: 1rem;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     overscroll-behavior: contain;
   }
 
@@ -94,19 +93,15 @@
   }
 
   .code-scroll-area::-webkit-scrollbar {
-    width: var(--code-scrollbar-size);
-    height: var(--code-scrollbar-size);
-  }
-
-  .code-scroll-area::-webkit-scrollbar:horizontal {
-    height: 12px;
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .code-scroll-area::-webkit-scrollbar-button {
-    width: 12px;
-    height: 12px;
-    background: transparent;
-    border: 0;
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .code-scroll-area::-webkit-scrollbar-corner {
@@ -118,67 +113,7 @@
   }
 
   .code-scroll-area::-webkit-scrollbar-thumb {
-    border: 3px solid transparent;
-    border-radius: 999px;
     background: transparent;
-    background-clip: content-box;
-  }
-
-  .code-scroll-shell:hover .code-scroll-area,
-  .code-scroll-shell:focus-within .code-scroll-area,
-  .code-scroll-area:hover,
-  .code-scroll-area:focus-visible {
-    scrollbar-color: rgba(148, 163, 184, 0.98) rgba(15, 23, 42, 0.38);
-  }
-
-  .code-scroll-shell:hover .code-scroll-area::-webkit-scrollbar-thumb,
-  .code-scroll-shell:focus-within .code-scroll-area::-webkit-scrollbar-thumb,
-  .code-scroll-area:hover::-webkit-scrollbar-thumb,
-  .code-scroll-area:focus-visible::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.98);
-    background-clip: content-box;
-  }
-
-  .code-scroll-shell:hover .code-scroll-area::-webkit-scrollbar-track,
-  .code-scroll-shell:focus-within .code-scroll-area::-webkit-scrollbar-track,
-  .code-scroll-area:hover::-webkit-scrollbar-track,
-  .code-scroll-area:focus-visible::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.38);
-  }
-
-  .code-scroll-shell:hover .code-scroll-area::-webkit-scrollbar-button,
-  .code-scroll-shell:focus-within .code-scroll-area::-webkit-scrollbar-button,
-  .code-scroll-area:hover::-webkit-scrollbar-button,
-  .code-scroll-area:focus-visible::-webkit-scrollbar-button {
-    background: rgba(15, 23, 42, 0.38);
-  }
-
-  .code-scroll-shell:hover
-    .code-scroll-area::-webkit-scrollbar-button:horizontal:decrement,
-  .code-scroll-shell:focus-within
-    .code-scroll-area::-webkit-scrollbar-button:horizontal:decrement,
-  .code-scroll-area:hover::-webkit-scrollbar-button:horizontal:decrement,
-  .code-scroll-area:focus-visible::-webkit-scrollbar-button:horizontal:decrement {
-    background:
-      linear-gradient(135deg, transparent 50%, rgba(148, 163, 184, 0.98) 50%)
-        58% 50% / 5px 5px no-repeat,
-      linear-gradient(225deg, transparent 50%, rgba(148, 163, 184, 0.98) 50%)
-        58% 50% / 5px 5px no-repeat,
-      rgba(15, 23, 42, 0.38);
-  }
-
-  .code-scroll-shell:hover
-    .code-scroll-area::-webkit-scrollbar-button:horizontal:increment,
-  .code-scroll-shell:focus-within
-    .code-scroll-area::-webkit-scrollbar-button:horizontal:increment,
-  .code-scroll-area:hover::-webkit-scrollbar-button:horizontal:increment,
-  .code-scroll-area:focus-visible::-webkit-scrollbar-button:horizontal:increment {
-    background:
-      linear-gradient(315deg, transparent 50%, rgba(148, 163, 184, 0.98) 50%)
-        42% 50% / 5px 5px no-repeat,
-      linear-gradient(45deg, transparent 50%, rgba(148, 163, 184, 0.98) 50%) 42%
-        50% / 5px 5px no-repeat,
-      rgba(15, 23, 42, 0.38);
   }
 
   @media (min-width: 640px) {
