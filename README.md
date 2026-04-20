@@ -19,6 +19,7 @@ Este projeto organiza uma biblioteca de componentes com foco em uso prático e d
 - React 19
 - TypeScript 5.9
 - Tailwind CSS 3
+- class-variance-authority
 - shadcn/ui
 - Radix UI
 - lucide-react
@@ -46,6 +47,9 @@ components/
     service-worker-registration.tsx
   sidebar.tsx
   docs/
+    catalog-primitives.tsx
+    preview-registry.tsx
+    previews/
     code-snippet-card.tsx
     component-carousel.tsx
   ui/
@@ -61,6 +65,8 @@ public/
   icon-192.svg
   icon-512.svg
   maskable-icon.svg
+scripts/
+  generate-catalog-entry.mjs    # scaffolding para novas entradas do catálogo
 ```
 
 ## Rotas
@@ -148,6 +154,28 @@ Esse catálogo alimenta:
 - a navegação entre componentes
 - a geração estática das páginas técnicas
 - a documentação exibida em cada rota
+
+## Convenção de estilos com cva()
+
+O projeto usa Class Variance Authority como convenção principal para variantes visuais e estados reutilizáveis.
+
+Regras práticas:
+
+- componentes-base e reutilizáveis devem expor superfícies, tamanhos, espaçamentos e estados por cva()
+- páginas do catálogo e componentes de documentação reutilizam variantes compartilhadas em lib/docs-cva.ts
+- className continua disponível para override pontual, não para substituir a API de variantes
+- tokens globais permanecem centralizados em app/globals.css
+
+Documentação detalhada:
+
+- docs/cva-conventions.md
+- docs/catalog-authoring.md
+
+Gerador de novas entradas:
+
+```bash
+npm run catalog:new -- --slug accordion --name "Accordion" --category "Layout"
+```
 
 ## Deploy na Vercel
 

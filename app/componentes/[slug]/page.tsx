@@ -1,16 +1,28 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cva } from "class-variance-authority";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+import {
+  CatalogActionLink,
+  CatalogHero,
+  CatalogHeroDescription,
+  CatalogHeroTitle,
+  CatalogInfoBlock,
+  CatalogMetaLabel,
+  CatalogPageContainer,
+  CatalogPageShell,
+  CatalogPill,
+  CatalogSectionDescription,
+  CatalogSurfaceCard,
+} from "@/components/docs/catalog-primitives";
 import { CodeSnippetCard } from "@/components/docs/code-snippet-card";
 import { ComponentCarousel } from "@/components/docs/component-carousel";
-import { Sidebar } from "@/components/sidebar";
+import { renderComponentPreview } from "@/components/docs/preview-registry";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,6 +35,54 @@ import {
   sharedCssTokens,
 } from "@/lib/component-catalog";
 
+const componentPageHeroLayoutVariants = cva(
+  "flex flex-wrap items-start justify-between gap-4",
+);
+
+const componentPageHeroContentVariants = cva("max-w-3xl space-y-4");
+
+const componentPageNextActionVariants = cva("hidden md:flex flex-wrap gap-2");
+
+const componentPageMobileCarouselVariants = cva("order-first md:hidden");
+
+const componentPageMobileCarouselHeaderVariants = cva("px-1 pb-4");
+
+const componentPageSectionGridVariants = cva(
+  "grid gap-6 xl:grid-cols-[1.1fr_0.9fr]",
+);
+
+const componentPageReferenceGridVariants = cva(
+  "grid gap-6 xl:grid-cols-[0.95fr_1.05fr]",
+);
+
+const componentPageSupportGridVariants = cva(
+  "grid gap-6 lg:grid-cols-[1fr_1fr]",
+);
+
+const componentPageInfoListVariants = cva("mt-3 flex flex-col gap-2 text-sm", {
+  variants: {
+    tone: {
+      default: "text-foreground",
+      roomy: "leading-6 text-foreground",
+    },
+  },
+  defaultVariants: {
+    tone: "default",
+  },
+});
+
+const componentPagePropsListVariants = cva("min-w-0 space-y-3");
+
+const componentPagePropsItemVariants = cva(
+  "min-w-0 overflow-hidden rounded-3xl border bg-background/75 p-4",
+);
+
+const componentPagePropsMetaVariants = cva(
+  "flex min-w-0 flex-wrap items-center gap-2",
+);
+
+const componentPageChipListVariants = cva("flex flex-wrap gap-2");
+
 type ComponentPageProps = {
   params: Promise<{
     slug: string;
@@ -33,100 +93,11 @@ export function generateStaticParams() {
   return componentCatalog.map((component) => ({ slug: component.slug }));
 }
 
-function renderPreview(slug: string) {
-  switch (slug) {
-    case "sidebar":
-      return (
-        <div className="flex min-h-[430px] items-start justify-start rounded-[28px] bg-[radial-gradient(circle_at_top,rgba(96,165,250,0.15),transparent_36%)] p-4">
-          <Sidebar />
-        </div>
-      );
-    case "button":
-      return (
-        <div className="space-y-6 rounded-[28px] border bg-background/70 p-6">
-          <div className="flex flex-wrap gap-3">
-            <Button>Default</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="ghost">Ghost</Button>
-            <Button variant="link">Link</Button>
-          </div>
-          <Separator />
-          <div className="flex flex-wrap items-center gap-3">
-            <Button size="sm">Small</Button>
-            <Button size="default">Default</Button>
-            <Button size="lg">Large</Button>
-            <Button size="icon" aria-label="Avançar">
-              <ArrowRight className="size-4" />
-            </Button>
-          </div>
-        </div>
-      );
-    case "card":
-      return (
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="bg-background/80">
-            <CardHeader>
-              <CardTitle>Receita mensal</CardTitle>
-              <CardDescription>
-                Atualizado com dados do período atual.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-semibold tracking-[-0.04em]">
-                R$ 24.900
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="bg-background/80">
-            <CardHeader>
-              <CardTitle>Pipeline</CardTitle>
-              <CardDescription>
-                Resumo operacional em bloco reutilizável.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm leading-6 text-muted-foreground">
-                O Card funciona como base para métricas, documentação ou áreas
-                de preview.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline">Detalhes</Button>
-            </CardFooter>
-          </Card>
-        </div>
-      );
-    case "separator":
-      return (
-        <div className="rounded-[28px] border bg-background/70 p-6">
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm font-medium text-foreground">
-                Separador horizontal
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Usado entre blocos verticais.
-              </p>
-            </div>
-            <Separator />
-            <div className="flex h-20 items-center justify-between gap-4 rounded-2xl border bg-card/70 px-4">
-              <span className="text-sm font-medium">Esquerda</span>
-              <Separator orientation="vertical" className="h-10" />
-              <span className="text-sm font-medium">Direita</span>
-            </div>
-          </div>
-        </div>
-      );
-    default:
-      return null;
-  }
-}
-
 export default async function ComponentPage({ params }: ComponentPageProps) {
   const { slug } = await params;
   const component = getComponentDoc(slug);
   const nextComponent = getNextComponentDoc(slug);
+  const preview = renderComponentPreview(slug);
 
   if (!component) {
     notFound();
@@ -135,33 +106,30 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
   const mobileComponents = componentCatalog;
 
   return (
-    <main className="min-h-screen overflow-x-clip px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="rounded-[28px] border border-white/60 bg-white/75 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.10)] backdrop-blur sm:rounded-[36px] sm:p-6 lg:p-10">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="max-w-3xl space-y-4">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <ArrowLeft className="size-4" />
-                Voltar para a home
+    <CatalogPageShell>
+      <CatalogPageContainer>
+        <CatalogHero>
+          <div className={componentPageHeroLayoutVariants()}>
+            <div className={componentPageHeroContentVariants()}>
+              <Link href="/" className="inline-flex">
+                <CatalogActionLink tone="muted">
+                  <ArrowLeft className="size-4" />
+                  Voltar para a home
+                </CatalogActionLink>
               </Link>
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                  {component.category}
-                </p>
-                <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl">
+                <CatalogMetaLabel>{component.category}</CatalogMetaLabel>
+                <CatalogHeroTitle className="mt-3">
                   {component.name}
-                </h1>
-                <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                </CatalogHeroTitle>
+                <CatalogHeroDescription className="mt-4">
                   {component.description}
-                </p>
+                </CatalogHeroDescription>
               </div>
             </div>
 
             {nextComponent ? (
-              <div className="hidden md:flex flex-wrap gap-2">
+              <div className={componentPageNextActionVariants()}>
                 <Button asChild variant="outline" className="rounded-full px-4">
                   <Link href={nextComponent.href}>
                     Visualizar próximo componente
@@ -171,18 +139,16 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
               </div>
             ) : null}
           </div>
-        </section>
+        </CatalogHero>
 
         {mobileComponents.length > 0 ? (
-          <section className="order-first md:hidden">
-            <div className="px-1 pb-4">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                Navegar entre componentes
-              </p>
-              <p className="mt-2 text-sm leading-6 text-foreground">
+          <section className={componentPageMobileCarouselVariants()}>
+            <div className={componentPageMobileCarouselHeaderVariants()}>
+              <CatalogMetaLabel>Navegar entre componentes</CatalogMetaLabel>
+              <CatalogSectionDescription tone="strong" className="mt-2">
                 Deslize horizontalmente para abrir outro componente da
                 biblioteca.
-              </p>
+              </CatalogSectionDescription>
             </div>
             <ComponentCarousel
               components={mobileComponents}
@@ -191,16 +157,24 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
           </section>
         ) : null}
 
-        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-          <Card className="border-white/60 bg-white/80 shadow-soft">
+        <section className={componentPageSectionGridVariants()}>
+          <CatalogSurfaceCard>
             <CardHeader>
               <CardTitle>Preview isolado</CardTitle>
               <CardDescription>{component.summary}</CardDescription>
             </CardHeader>
-            <CardContent>{renderPreview(component.slug)}</CardContent>
-          </Card>
+            <CardContent>
+              {preview ? (
+                preview
+              ) : (
+                <CatalogInfoBlock tone="muted" density="roomy">
+                  Preview ainda nao registrado para este componente.
+                </CatalogInfoBlock>
+              )}
+            </CardContent>
+          </CatalogSurfaceCard>
 
-          <Card className="border-white/60 bg-white/80 shadow-soft">
+          <CatalogSurfaceCard>
             <CardHeader>
               <CardTitle>Informações básicas</CardTitle>
               <CardDescription>
@@ -208,62 +182,63 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-3xl border bg-background/70 p-4">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  Arquivos base
-                </p>
-                <div className="mt-3 flex flex-col gap-2 text-sm text-foreground">
+              <CatalogInfoBlock tone="muted">
+                <CatalogMetaLabel>Arquivos base</CatalogMetaLabel>
+                <div className={componentPageInfoListVariants()}>
                   {component.files.map((file) => (
                     <span key={file}>{file}</span>
                   ))}
                 </div>
-              </div>
-              <div className="rounded-3xl border bg-background/70 p-4">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  Uso recomendado
-                </p>
-                <div className="mt-3 flex flex-col gap-2 text-sm leading-6 text-foreground">
+              </CatalogInfoBlock>
+              <CatalogInfoBlock tone="muted">
+                <CatalogMetaLabel>Uso recomendado</CatalogMetaLabel>
+                <div
+                  className={componentPageInfoListVariants({ tone: "roomy" })}
+                >
                   {component.usageNotes.map((note) => (
                     <p key={note}>{note}</p>
                   ))}
                 </div>
-              </div>
+              </CatalogInfoBlock>
             </CardContent>
-          </Card>
+          </CatalogSurfaceCard>
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <Card className="overflow-hidden border-white/60 bg-white/80 shadow-soft">
+        <section className={componentPageReferenceGridVariants()}>
+          <CatalogSurfaceCard overflow="hidden">
             <CardHeader>
               <CardTitle>Props relevantes</CardTitle>
               <CardDescription>
                 Referência rápida da API atual do componente.
               </CardDescription>
             </CardHeader>
-            <CardContent className="min-w-0 space-y-3">
+            <CardContent className={componentPagePropsListVariants()}>
               {component.props.map((item) => (
                 <div
                   key={item.name}
-                  className="min-w-0 overflow-hidden rounded-3xl border bg-background/75 p-4"
+                  className={componentPagePropsItemVariants()}
                 >
-                  <div className="flex min-w-0 flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  <div className={componentPagePropsMetaVariants()}>
+                    <CatalogPill tone="softPrimary" size="xsStrong">
                       {item.name}
-                    </span>
-                    <span className="max-w-full break-words rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+                    </CatalogPill>
+                    <CatalogPill
+                      tone="softSecondary"
+                      className="max-w-full break-words"
+                    >
                       {item.type}
-                    </span>
-                    <span className="max-w-full break-words rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
+                    </CatalogPill>
+                    <CatalogPill className="max-w-full break-words">
                       default: {item.defaultValue}
-                    </span>
+                    </CatalogPill>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  <CatalogSectionDescription className="mt-3">
                     {item.description}
-                  </p>
+                  </CatalogSectionDescription>
                 </div>
               ))}
             </CardContent>
-          </Card>
+          </CatalogSurfaceCard>
 
           <CodeSnippetCard
             title="Código reutilizável"
@@ -272,8 +247,8 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
           />
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <Card className="border-white/60 bg-white/80 shadow-soft">
+        <section className={componentPageSupportGridVariants()}>
+          <CatalogSurfaceCard>
             <CardHeader>
               <CardTitle>Stack técnica utilizada</CardTitle>
               <CardDescription>
@@ -281,31 +256,25 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="flex flex-wrap gap-2">
+              <div className={componentPageChipListVariants()}>
                 {component.stack.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border bg-background/70 px-3 py-1 text-sm font-medium text-foreground"
-                  >
+                  <CatalogPill key={item} tone="outlineForeground" size="sm">
                     {item}
-                  </span>
+                  </CatalogPill>
                 ))}
               </div>
               <Separator />
-              <div className="flex flex-wrap gap-2">
+              <div className={componentPageChipListVariants()}>
                 {installedStack.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full bg-secondary px-3 py-1 text-sm font-medium text-secondary-foreground"
-                  >
+                  <CatalogPill key={item} tone="softSecondary" size="sm">
                     {item}
-                  </span>
+                  </CatalogPill>
                 ))}
               </div>
             </CardContent>
-          </Card>
+          </CatalogSurfaceCard>
 
-          <Card className="border-white/60 bg-white/80 shadow-soft">
+          <CatalogSurfaceCard>
             <CardHeader>
               <CardTitle>CSS e tokens envolvidos</CardTitle>
               <CardDescription>
@@ -315,26 +284,20 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
             </CardHeader>
             <CardContent className="space-y-3">
               {component.cssNotes.map((note) => (
-                <div
-                  key={note}
-                  className="rounded-3xl border bg-background/75 p-4 text-sm leading-6 text-foreground"
-                >
+                <CatalogInfoBlock key={note} density="roomy">
                   {note}
-                </div>
+                </CatalogInfoBlock>
               ))}
               <Separator />
               {sharedCssTokens.map((token) => (
-                <div
-                  key={token}
-                  className="rounded-3xl border bg-background/75 p-4 text-sm leading-6 text-muted-foreground"
-                >
+                <CatalogInfoBlock key={token} tone="muted" density="roomy">
                   {token}
-                </div>
+                </CatalogInfoBlock>
               ))}
             </CardContent>
-          </Card>
+          </CatalogSurfaceCard>
         </section>
-      </div>
-    </main>
+      </CatalogPageContainer>
+    </CatalogPageShell>
   );
 }

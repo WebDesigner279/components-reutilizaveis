@@ -1,9 +1,24 @@
 import Link from "next/link";
+import { cva } from "class-variance-authority";
 import { ArrowRight, Sparkles } from "lucide-react";
 
+import {
+  CatalogActionLink,
+  CatalogHero,
+  CatalogHeroBadge,
+  CatalogHeroDescription,
+  CatalogHeroTitle,
+  CatalogInfoBlock,
+  CatalogMetaLabel,
+  CatalogPageContainer,
+  CatalogPageShell,
+  CatalogPill,
+  CatalogSectionDescription,
+  CatalogSectionTitle,
+  CatalogSurfaceCard,
+} from "@/components/docs/catalog-primitives";
 import { ComponentCarousel } from "@/components/docs/component-carousel";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,91 +30,108 @@ import {
   sharedCssTokens,
 } from "@/lib/component-catalog";
 
+const homeMobileSectionVariants = cva("md:hidden");
+
+const homeMobileHeaderVariants = cva("px-1 pb-4");
+
+const homeSectionGridVariants = cva(
+  "grid gap-5 xl:grid-cols-[1.15fr_0.85fr] xl:gap-6",
+);
+
+const homeCatalogSectionVariants = cva("hidden space-y-4 md:block");
+
+const homeCatalogHeaderVariants = cva("space-y-2 px-1 sm:px-0");
+
+const homeCatalogGridVariants = cva("hidden gap-4 md:grid md:grid-cols-2");
+
+const homeCatalogItemVariants = cva(
+  "group rounded-[28px] border bg-background/75 p-5 transition-colors hover:bg-background",
+);
+
+const homeCatalogItemHeaderVariants = cva(
+  "flex items-start justify-between gap-3",
+);
+
+const homeStackListVariants = cva("mt-3 flex flex-wrap gap-2");
+
+const homeTokensListVariants = cva("mt-3 flex flex-col gap-3");
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen overflow-x-clip px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="rounded-[28px] border border-white/60 bg-white/75 p-5 shadow-[0_30px_80px_rgba(15,23,42,0.10)] backdrop-blur sm:rounded-[36px] sm:p-6 lg:p-10">
+    <CatalogPageShell>
+      <CatalogPageContainer>
+        <CatalogHero>
           <div className="max-w-3xl space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            <CatalogHeroBadge>
               <Sparkles className="size-3.5" />
               Biblioteca de componentes
-            </div>
+            </CatalogHeroBadge>
 
             <div className="space-y-4">
-              <h1 className="text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl lg:text-6xl">
+              <CatalogHeroTitle size="display">
                 Catálogo para uso de componentes reutilizáveis
-              </h1>
-              <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+              </CatalogHeroTitle>
+              <CatalogHeroDescription>
                 Encontre aqui componentes prontos e reutilizáveis, com códigos
                 limpos.
-              </p>
+              </CatalogHeroDescription>
             </div>
           </div>
-        </section>
+        </CatalogHero>
 
-        <section className="md:hidden">
-          <div className="px-1 pb-4">
-            <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">
-              Componentes disponíveis
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+        <section className={homeMobileSectionVariants()}>
+          <div className={homeMobileHeaderVariants()}>
+            <CatalogSectionTitle>Componentes disponíveis</CatalogSectionTitle>
+            <CatalogSectionDescription className="mt-2">
               Cada item abre uma área dedicada com preview isolado e
               especificações técnicas relevantes.
-            </p>
+            </CatalogSectionDescription>
           </div>
           <ComponentCarousel components={componentCatalog} />
         </section>
 
-        <section
-          id="componentes"
-          className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr] xl:gap-6"
-        >
-          <section className="hidden space-y-4 md:block">
-            <div className="space-y-2 px-1 sm:px-0">
-              <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground sm:text-2xl">
+        <section id="componentes" className={homeSectionGridVariants()}>
+          <section className={homeCatalogSectionVariants()}>
+            <div className={homeCatalogHeaderVariants()}>
+              <CatalogSectionTitle size="responsive">
                 Componentes disponíveis
-              </h2>
-              <p className="max-w-xl text-sm leading-6 text-muted-foreground">
+              </CatalogSectionTitle>
+              <CatalogSectionDescription className="max-w-xl">
                 Cada item abre uma área dedicada com preview isolado e
                 especificações técnicas relevantes.
-              </p>
+              </CatalogSectionDescription>
             </div>
-            <div className="hidden gap-4 md:grid md:grid-cols-2">
+            <div className={homeCatalogGridVariants()}>
               {componentCatalog.map((component) => (
                 <Link
                   key={component.slug}
                   href={component.href}
-                  className="group rounded-[28px] border bg-background/75 p-5 transition-colors hover:bg-background"
+                  className={homeCatalogItemVariants()}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className={homeCatalogItemHeaderVariants()}>
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                        {component.category}
-                      </p>
-                      <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-foreground">
+                      <CatalogMetaLabel>{component.category}</CatalogMetaLabel>
+                      <CatalogSectionTitle className="mt-2">
                         {component.name}
-                      </h2>
+                      </CatalogSectionTitle>
                     </div>
-                    <span className="rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
-                      {component.props.length} props
-                    </span>
+                    <CatalogPill>{component.props.length} props</CatalogPill>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  <CatalogSectionDescription className="mt-3">
                     {component.summary}
-                  </p>
-                  <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-foreground">
+                  </CatalogSectionDescription>
+                  <CatalogActionLink className="mt-5">
                     Abrir documentação
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </div>
+                  </CatalogActionLink>
                 </Link>
               ))}
             </div>
           </section>
 
-          <Card className="min-w-0 overflow-hidden border-white/60 bg-white/80 shadow-soft">
+          <CatalogSurfaceCard overflow="hidden" className="min-w-0">
             <CardHeader className="p-5 pb-0 sm:p-6 sm:pb-0">
-              <CardTitle className="text-xl sm:text-2xl">
+              <CardTitle className="text-xl font-semibold tracking-[-0.03em] text-foreground sm:text-2xl">
                 Base técnica da biblioteca
               </CardTitle>
               <CardDescription>
@@ -109,40 +141,40 @@ export default function HomePage() {
             </CardHeader>
             <CardContent className="min-w-0 space-y-4 p-5 pt-5 sm:space-y-5 sm:p-6 sm:pt-6">
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  Stack instalada
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <CatalogMetaLabel>Stack instalada</CatalogMetaLabel>
+                <div className={homeStackListVariants()}>
                   {installedStack.map((item) => (
-                    <span
+                    <CatalogPill
                       key={item}
-                      className="max-w-full break-words rounded-full border bg-background/70 px-3 py-1 text-sm font-medium text-foreground"
+                      tone="outlineForeground"
+                      size="sm"
+                      className="max-w-full break-words"
                     >
                       {item}
-                    </span>
+                    </CatalogPill>
                   ))}
                 </div>
               </div>
 
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  CSS e tokens compartilhados
-                </p>
-                <div className="mt-3 flex flex-col gap-3">
+                <CatalogMetaLabel>CSS e tokens compartilhados</CatalogMetaLabel>
+                <div className={homeTokensListVariants()}>
                   {sharedCssTokens.map((token) => (
-                    <div
+                    <CatalogInfoBlock
                       key={token}
-                      className="break-words rounded-3xl border bg-background/70 p-4 text-sm leading-6 text-muted-foreground"
+                      tone="muted"
+                      density="roomy"
+                      className="break-words"
                     >
                       {token}
-                    </div>
+                    </CatalogInfoBlock>
                   ))}
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </CatalogSurfaceCard>
         </section>
-      </div>
-    </main>
+      </CatalogPageContainer>
+    </CatalogPageShell>
   );
 }

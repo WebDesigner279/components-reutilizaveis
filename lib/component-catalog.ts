@@ -36,6 +36,7 @@ export const sharedCssTokens = [
   "--secondary / --muted / --accent para superfícies e feedback visual",
   "--radius para padronizar cantos entre componentes",
   "Classes Tailwind compostas com cn() e tailwind-merge",
+  "Variantes compartilhadas centralizadas com cva() para API visual previsível",
 ];
 
 export const componentCatalog: ComponentDoc[] = [
@@ -68,6 +69,7 @@ export const componentCatalog: ComponentDoc[] = [
       "Por padrão não navega; cada clique apenas muda o item ativo localmente.",
       "Quando enableNavigation=true, a renderização volta a usar links reais.",
       "Aceita items customizados para plugar menus de diferentes módulos.",
+      "O prop size controla a largura base sem exigir overrides manuais.",
     ],
     props: [
       {
@@ -94,6 +96,13 @@ export const componentCatalog: ComponentDoc[] = [
         defaultValue: "undefined",
         description:
           "Permite estender o container externo com classes adicionais.",
+      },
+      {
+        name: "size",
+        type: '"default" | "compact"',
+        defaultValue: '"default"',
+        description:
+          "Seleciona a largura estrutural prevista no cva do componente.",
       },
       {
         name: "enableNavigation",
@@ -189,18 +198,37 @@ export function Actions() {
       "Ideal para montar painéis, blocos de documentação, resumos e áreas de preview com separação visual consistente.",
     href: "/componentes/card",
     files: ["components/ui/card.tsx", "lib/utils.ts"],
-    stack: ["React", "Tailwind CSS", "cn() para composição de classes"],
+    stack: [
+      "React",
+      "Tailwind CSS",
+      "class-variance-authority",
+      "cn() para composição de classes",
+    ],
     cssNotes: [
-      "A casca principal usa rounded-3xl, border e bg-card como base neutra.",
-      "Os subslots mantêm padding padrão para acelerar composição em páginas técnicas.",
+      "A casca principal usa variantes em cva() para superfície default, elevated e ghost.",
+      "Os subslots mantêm padding padrão e variantes de spacing para acelerar composição em páginas técnicas.",
       "Aceita className em todos os blocos para refinamentos locais.",
     ],
     usageNotes: [
       "Funciona melhor como container de documentação, métricas ou previews isolados.",
       "Os subcomponentes são opcionais e podem ser combinados conforme a necessidade.",
+      "Use variant e spacing antes de recorrer a overrides diretos com className.",
       "Os data-slot facilitam inspeção e testes estruturais.",
     ],
     props: [
+      {
+        name: "variant",
+        type: '"default" | "elevated" | "ghost"',
+        defaultValue: '"default"',
+        description: "Controla a superfície principal do Card via cva().",
+      },
+      {
+        name: "spacing",
+        type: '"default" | "compact"',
+        defaultValue: '"default"',
+        description:
+          "Disponível em CardHeader, CardContent e CardFooter para densidade vertical consistente.",
+      },
       {
         name: "className",
         type: "string",
@@ -246,10 +274,15 @@ export function SummaryCard() {
       "Componente fino e utilitário para separar áreas da interface mantendo aderência aos tokens de border.",
     href: "/componentes/separator",
     files: ["components/ui/separator.tsx", "lib/utils.ts"],
-    stack: ["@radix-ui/react-separator", "React forwardRef", "Tailwind CSS"],
+    stack: [
+      "@radix-ui/react-separator",
+      "React forwardRef",
+      "Tailwind CSS",
+      "class-variance-authority",
+    ],
     cssNotes: [
       "A cor base usa bg-border para acompanhar os tokens do tema.",
-      "Aceita orientation horizontal e vertical com dimensões ajustadas automaticamente.",
+      "A orientação horizontal e vertical é resolvida por variantes em cva().",
       "Pode receber className adicional para espessura ou margem local.",
     ],
     usageNotes: [
