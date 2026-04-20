@@ -24,10 +24,12 @@ import type { ComponentDoc } from "@/lib/component-catalog";
 const desktopFilterWrapperVariants = cva("hidden lg:block");
 
 const desktopFilterCardVariants = cva(
-  "sticky top-6 w-full max-w-[355px] justify-self-start",
+  "sticky top-6 flex max-h-[calc(100dvh-3rem)] w-full max-w-[355px] flex-col justify-self-start overflow-hidden",
 );
 
-const desktopFilterPanelBodyVariants = cva("space-y-5");
+const desktopFilterPanelBodyVariants = cva(
+  "flex min-h-0 flex-1 flex-col gap-5",
+);
 
 const desktopFilterCollapsibleHeaderVariants = cva(
   "flex w-full items-center justify-between gap-3 rounded-2xl border bg-background/60 px-3 py-3 text-left transition-colors hover:bg-background",
@@ -56,16 +58,34 @@ const desktopFilterInputVariants = cva(
   "w-full border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground",
 );
 
-const desktopFilterListVariants = cva("flex flex-col gap-3");
+const desktopFilterResultsSectionVariants = cva(
+  "flex min-h-0 flex-1 flex-col gap-3",
+);
+
+const desktopFilterResultsViewportVariants = cva("min-h-0", {
+  variants: {
+    scrollable: {
+      true: "desktop-filter-scroll-area max-h-[15.5rem] overflow-y-auto xl:max-h-[17rem]",
+      false: "overflow-visible",
+    },
+  },
+  defaultVariants: {
+    scrollable: false,
+  },
+});
+
+const desktopFilterListVariants = cva("flex min-w-0 flex-col gap-3");
 
 const desktopFilterItemVariants = cva(
-  "rounded-[24px] border bg-background/75 p-4 transition-colors hover:bg-background",
+  "block w-full shrink-0 rounded-[24px] border bg-background/75 p-4 transition-colors hover:bg-background",
 );
 
 interface ComponentDesktopFilterProps {
   components: ComponentDoc[];
   currentSlug: string;
 }
+
+const DESKTOP_FILTER_SCROLL_THRESHOLD = 15;
 
 function normalizeValue(value: string) {
   return value
@@ -97,6 +117,9 @@ export function ComponentDesktopFilter({
 
     return searchableText.includes(normalizedQuery);
   });
+
+  const shouldEnableResultsScroll =
+    filteredComponents.length >= DESKTOP_FILTER_SCROLL_THRESHOLD;
 
   return (
     <section className={desktopFilterWrapperVariants()}>
@@ -134,7 +157,7 @@ export function ComponentDesktopFilter({
             />
           </label>
 
-          <div className="space-y-3">
+          <div className={desktopFilterResultsSectionVariants()}>
             <button
               type="button"
               className={desktopFilterCollapsibleHeaderVariants()}
@@ -158,31 +181,37 @@ export function ComponentDesktopFilter({
 
             {!isResultsCollapsed ? (
               filteredComponents.length > 0 ? (
-                <div className={desktopFilterListVariants()}>
-                  {filteredComponents.map((component) => (
-                    <Link
-                      key={component.slug}
-                      href={component.href}
-                      className={desktopFilterItemVariants()}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <CatalogMetaLabel>
-                            {component.category}
-                          </CatalogMetaLabel>
-                          <CatalogSectionTitle className="mt-2 text-xl">
-                            {component.name}
-                          </CatalogSectionTitle>
+                <div
+                  className={desktopFilterResultsViewportVariants({
+                    scrollable: shouldEnableResultsScroll,
+                  })}
+                >
+                  <div className={desktopFilterListVariants()}>
+                    {filteredComponents.map((component) => (
+                      <Link
+                        key={component.slug}
+                        href={component.href}
+                        className={desktopFilterItemVariants()}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <CatalogMetaLabel>
+                              {component.category}
+                            </CatalogMetaLabel>
+                            <CatalogSectionTitle className="mt-2 text-xl">
+                              {component.name}
+                            </CatalogSectionTitle>
+                          </div>
+                          <CatalogPill>
+                            {component.props.length} props
+                          </CatalogPill>
                         </div>
-                        <CatalogPill>
-                          {component.props.length} props
-                        </CatalogPill>
-                      </div>
-                      <CatalogSectionDescription className="mt-3">
-                        {component.summary}
-                      </CatalogSectionDescription>
-                    </Link>
-                  ))}
+                        <CatalogSectionDescription className="mt-3">
+                          {component.summary}
+                        </CatalogSectionDescription>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <CatalogInfoBlock tone="muted" density="roomy">

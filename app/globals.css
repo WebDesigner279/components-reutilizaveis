@@ -116,6 +116,28 @@
     background: transparent;
   }
 
+  .desktop-filter-scroll-area {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+  }
+
+  .desktop-filter-scroll-area::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .desktop-filter-scroll-area::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .desktop-filter-scroll-area::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   @media (min-width: 640px) {
     .code-scroll-area {
       --code-scroll-padding: 1.25rem;

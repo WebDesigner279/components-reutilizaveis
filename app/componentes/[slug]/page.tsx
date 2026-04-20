@@ -48,21 +48,17 @@ const componentPageMobileCarouselVariants = cva("order-first md:hidden");
 
 const componentPageMobileCarouselHeaderVariants = cva("px-1 pb-4");
 
-const componentPageSectionGridVariants = cva(
-  "grid gap-6 xl:grid-cols-[1.66fr_0.96fr]",
-);
+const componentPageSectionGridVariants = cva("min-w-0 space-y-6");
 
-const componentPageReferenceGridVariants = cva(
-  "grid gap-6 xl:grid-cols-[0.95fr_1.05fr]",
-);
+const componentPageReferenceGridVariants = cva("min-w-0 space-y-6");
 
-const componentPageSupportGridVariants = cva(
-  "grid gap-6 lg:grid-cols-[1fr_1fr]",
-);
+const componentPageSupportGridVariants = cva("min-w-0 space-y-6");
 
 const componentPageDesktopNavigationGridVariants = cva(
-  "grid gap-6 lg:grid-cols-[minmax(280px,0.78fr)_minmax(0,1.16fr)] lg:items-start xl:grid-cols-[minmax(320px,0.74fr)_minmax(0,1.2fr)]",
+  "grid min-w-0 gap-6 lg:grid-cols-[minmax(280px,0.78fr)_minmax(0,1.16fr)] lg:items-start xl:grid-cols-[minmax(320px,0.74fr)_minmax(0,1.2fr)]",
 );
+
+const componentPageDesktopContentStackVariants = cva("min-w-0 space-y-6");
 
 const componentPageInfoListVariants = cva("mt-3 flex flex-col gap-2 text-sm", {
   variants: {
@@ -168,146 +164,157 @@ export default async function ComponentPage({ params }: ComponentPageProps) {
             currentSlug={slug}
           />
 
-          <div className={componentPageSectionGridVariants()}>
-            <CatalogSurfaceCard>
-              <CardHeader>
-                <CardTitle>Preview isolado</CardTitle>
-                <CardDescription>{component.summary}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {preview ? (
-                  preview
-                ) : (
-                  <CatalogInfoBlock tone="muted" density="roomy">
-                    Preview ainda nao registrado para este componente.
+          <div className={componentPageDesktopContentStackVariants()}>
+            <div className={componentPageSectionGridVariants()}>
+              <CatalogSurfaceCard>
+                <CardHeader>
+                  <CardTitle>Preview isolado</CardTitle>
+                  <CardDescription>{component.summary}</CardDescription>
+                </CardHeader>
+                <CardContent className="min-w-0">
+                  {preview ? (
+                    preview
+                  ) : (
+                    <CatalogInfoBlock tone="muted" density="roomy">
+                      Preview ainda nao registrado para este componente.
+                    </CatalogInfoBlock>
+                  )}
+                </CardContent>
+              </CatalogSurfaceCard>
+
+              <CatalogSurfaceCard>
+                <CardHeader>
+                  <CardTitle>Informações básicas</CardTitle>
+                  <CardDescription>
+                    Resumo técnico direto para adoção e manutenção.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <CatalogInfoBlock tone="muted">
+                    <CatalogMetaLabel>Arquivos base</CatalogMetaLabel>
+                    <div className={componentPageInfoListVariants()}>
+                      {component.files.map((file) => (
+                        <span key={file} className="break-words">
+                          {file}
+                        </span>
+                      ))}
+                    </div>
                   </CatalogInfoBlock>
-                )}
-              </CardContent>
-            </CatalogSurfaceCard>
-
-            <CatalogSurfaceCard>
-              <CardHeader>
-                <CardTitle>Informações básicas</CardTitle>
-                <CardDescription>
-                  Resumo técnico direto para adoção e manutenção.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <CatalogInfoBlock tone="muted">
-                  <CatalogMetaLabel>Arquivos base</CatalogMetaLabel>
-                  <div className={componentPageInfoListVariants()}>
-                    {component.files.map((file) => (
-                      <span key={file}>{file}</span>
-                    ))}
-                  </div>
-                </CatalogInfoBlock>
-                <CatalogInfoBlock tone="muted">
-                  <CatalogMetaLabel>Uso recomendado</CatalogMetaLabel>
-                  <div
-                    className={componentPageInfoListVariants({ tone: "roomy" })}
-                  >
-                    {component.usageNotes.map((note) => (
-                      <p key={note}>{note}</p>
-                    ))}
-                  </div>
-                </CatalogInfoBlock>
-              </CardContent>
-            </CatalogSurfaceCard>
-          </div>
-        </section>
-
-        <section className={componentPageReferenceGridVariants()}>
-          <CatalogSurfaceCard overflow="hidden">
-            <CardHeader>
-              <CardTitle>Props relevantes</CardTitle>
-              <CardDescription>
-                Referência rápida da API atual do componente.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className={componentPagePropsListVariants()}>
-              {component.props.map((item) => (
-                <div
-                  key={item.name}
-                  className={componentPagePropsItemVariants()}
-                >
-                  <div className={componentPagePropsMetaVariants()}>
-                    <CatalogPill tone="softPrimary" size="xsStrong">
-                      {item.name}
-                    </CatalogPill>
-                    <CatalogPill
-                      tone="softSecondary"
-                      className="max-w-full break-words"
+                  <CatalogInfoBlock tone="muted">
+                    <CatalogMetaLabel>Uso recomendado</CatalogMetaLabel>
+                    <div
+                      className={componentPageInfoListVariants({
+                        tone: "roomy",
+                      })}
                     >
-                      {item.type}
-                    </CatalogPill>
-                    <CatalogPill className="max-w-full break-words">
-                      default: {item.defaultValue}
-                    </CatalogPill>
+                      {component.usageNotes.map((note) => (
+                        <p key={note}>{note}</p>
+                      ))}
+                    </div>
+                  </CatalogInfoBlock>
+                </CardContent>
+              </CatalogSurfaceCard>
+            </div>
+
+            <section className={componentPageReferenceGridVariants()}>
+              <CodeSnippetCard
+                title="Código reutilizável"
+                description="Snippet mínimo para uso imediato no projeto."
+                code={component.snippet}
+              />
+
+              <CatalogSurfaceCard overflow="hidden">
+                <CardHeader>
+                  <CardTitle>Props relevantes</CardTitle>
+                  <CardDescription>
+                    Referência rápida da API atual do componente.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className={componentPagePropsListVariants()}>
+                  {component.props.map((item) => (
+                    <div
+                      key={item.name}
+                      className={componentPagePropsItemVariants()}
+                    >
+                      <div className={componentPagePropsMetaVariants()}>
+                        <CatalogPill tone="softPrimary" size="xsStrong">
+                          {item.name}
+                        </CatalogPill>
+                        <CatalogPill
+                          tone="softSecondary"
+                          className="max-w-full break-words"
+                        >
+                          {item.type}
+                        </CatalogPill>
+                        <CatalogPill className="max-w-full break-words">
+                          default: {item.defaultValue}
+                        </CatalogPill>
+                      </div>
+                      <CatalogSectionDescription className="mt-3">
+                        {item.description}
+                      </CatalogSectionDescription>
+                    </div>
+                  ))}
+                </CardContent>
+              </CatalogSurfaceCard>
+            </section>
+
+            <section className={componentPageSupportGridVariants()}>
+              <CatalogSurfaceCard>
+                <CardHeader>
+                  <CardTitle>Stack técnica utilizada</CardTitle>
+                  <CardDescription>
+                    Camadas diretamente envolvidas no componente e na
+                    biblioteca.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-5">
+                  <div className={componentPageChipListVariants()}>
+                    {component.stack.map((item) => (
+                      <CatalogPill
+                        key={item}
+                        tone="outlineForeground"
+                        size="sm"
+                      >
+                        {item}
+                      </CatalogPill>
+                    ))}
                   </div>
-                  <CatalogSectionDescription className="mt-3">
-                    {item.description}
-                  </CatalogSectionDescription>
-                </div>
-              ))}
-            </CardContent>
-          </CatalogSurfaceCard>
+                  <Separator />
+                  <div className={componentPageChipListVariants()}>
+                    {installedStack.map((item) => (
+                      <CatalogPill key={item} tone="softSecondary" size="sm">
+                        {item}
+                      </CatalogPill>
+                    ))}
+                  </div>
+                </CardContent>
+              </CatalogSurfaceCard>
 
-          <CodeSnippetCard
-            title="Código reutilizável"
-            description="Snippet mínimo para uso imediato no projeto."
-            code={component.snippet}
-          />
-        </section>
-
-        <section className={componentPageSupportGridVariants()}>
-          <CatalogSurfaceCard>
-            <CardHeader>
-              <CardTitle>Stack técnica utilizada</CardTitle>
-              <CardDescription>
-                Camadas diretamente envolvidas no componente e na biblioteca.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div className={componentPageChipListVariants()}>
-                {component.stack.map((item) => (
-                  <CatalogPill key={item} tone="outlineForeground" size="sm">
-                    {item}
-                  </CatalogPill>
-                ))}
-              </div>
-              <Separator />
-              <div className={componentPageChipListVariants()}>
-                {installedStack.map((item) => (
-                  <CatalogPill key={item} tone="softSecondary" size="sm">
-                    {item}
-                  </CatalogPill>
-                ))}
-              </div>
-            </CardContent>
-          </CatalogSurfaceCard>
-
-          <CatalogSurfaceCard>
-            <CardHeader>
-              <CardTitle>CSS e tokens envolvidos</CardTitle>
-              <CardDescription>
-                Informações básicas para manter consistência visual na expansão
-                da biblioteca.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {component.cssNotes.map((note) => (
-                <CatalogInfoBlock key={note} density="roomy">
-                  {note}
-                </CatalogInfoBlock>
-              ))}
-              <Separator />
-              {sharedCssTokens.map((token) => (
-                <CatalogInfoBlock key={token} tone="muted" density="roomy">
-                  {token}
-                </CatalogInfoBlock>
-              ))}
-            </CardContent>
-          </CatalogSurfaceCard>
+              <CatalogSurfaceCard>
+                <CardHeader>
+                  <CardTitle>CSS e tokens envolvidos</CardTitle>
+                  <CardDescription>
+                    Informações básicas para manter consistência visual na
+                    expansão da biblioteca.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {component.cssNotes.map((note) => (
+                    <CatalogInfoBlock key={note} density="roomy">
+                      {note}
+                    </CatalogInfoBlock>
+                  ))}
+                  <Separator />
+                  {sharedCssTokens.map((token) => (
+                    <CatalogInfoBlock key={token} tone="muted" density="roomy">
+                      {token}
+                    </CatalogInfoBlock>
+                  ))}
+                </CardContent>
+              </CatalogSurfaceCard>
+            </section>
+          </div>
         </section>
       </CatalogPageContainer>
     </CatalogPageShell>
